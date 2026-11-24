@@ -18,7 +18,7 @@ button{font:inherit;padding:9px 14px;border:0;border-radius:9px;background:#c810
 button.s{background:#eee;color:#222}button.x{background:#fff;color:#b71c1c;border:1px solid #e5e5ea;padding:6px 10px}
 .row{display:grid;grid-template-columns:50px 1.2fr 1.6fr 80px 1fr 90px auto;gap:6px;align-items:end;margin-bottom:8px}
 .bar{display:flex;gap:8px;flex-wrap:wrap}
-.note{font-size:13px;color:#555;line-height:1.8}
+.gbox{background:#fafafa;border:1px dashed #d6d6dc;border-radius:12px;padding:10px;margin:8px 0}.ch{margin:5px 0 5px 0;padding-inline-start:18px}.bar input,.bar select{min-width:90px}.inl{display:inline-flex;align-items:center;gap:4px;margin:0 6px;font-size:13px;color:#222;white-space:nowrap}button.sm{padding:5px 10px;font-size:13px;margin-top:4px}.itbox{border:1px solid #e5e5ea;border-radius:12px;padding:10px;margin-bottom:12px}details summary{cursor:pointer;font-weight:700;margin:6px 0}.gh{font-size:12px;color:#888;margin-top:8px}.refs{margin:6px 0}.note{font-size:13px;color:#555;line-height:1.8}
 @media(max-width:700px){.row{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -49,8 +49,17 @@ $("#dl").onclick=function(){grab();var b=new Blob([JSON.stringify(C,null,2)],{ty
  var msg="";if(list.indexOf(slug)<0)msg="\nمطعم جديد: ضيف \""+slug+"\" في restaurants/index.json";alert("حطه في restaurants/"+slug+"/config.json"+msg)};
 $("#prev").onclick=function(){grab();sessionStorage.setItem("talabak:preview",JSON.stringify(C));window.open("index.html?r="+encodeURIComponent(slug)+"&preview=1","_blank")};
 function f(id,label,val,type){return '<div><label>'+label+'</label><input id="'+id+'" type="'+(type||"text")+'" value="'+esc(val)+'"></div>'}
+function gEd(g,p){ // p = path prefix to group object
+ return '<div class="gbox"><div class="bar"><input data-p="'+p+'.name" value="'+esc(g.name)+'" placeholder="اسم المجموعة (حجم، نكهة، إضافات...)" style="flex:2">'+
+ '<select data-p="'+p+'.type" style="flex:1"><option value="single"'+(g.type==="single"?" selected":"")+'>اختيار واحد</option><option value="multi"'+(g.type!=="single"?" selected":"")+'>اختيارات متعددة</option></select>'+
+ '<label class="inl"><input type="checkbox" data-p="'+p+'.required" '+(g.required!==false&&g.type==="single"||g.required?"checked":"")+'> مطلوب</label>'+
+ (g.type!=="single"?'<input type="number" data-p="'+p+'.max" value="'+esc(g.max||"")+'" placeholder="أقصى عدد" style="flex:.7">':'')+
+ '<button class="x" data-del="'+p+'">حذف</button></div>'+
+ (g.choices||[]).map(function(c,ci){return '<div class="bar ch"><input data-p="'+p+'.choices.'+ci+'.name" value="'+esc(c.name)+'" placeholder="الاختيار (صاروخ، سبايسي...)" style="flex:2"><input type="number" data-p="'+p+'.choices.'+ci+'.price" value="'+esc(c.price||0)+'" placeholder="فرق السعر" style="flex:1"><button class="x" data-del="'+p+'.choices.'+ci+'">✕</button></div>'}).join("")+
+ '<button class="s sm" data-addch="'+p+'">+ اختيار</button></div>'}
 function draw(){
  $("#path").textContent="الملف: restaurants/"+slug+"/config.json  |  الرابط: ?r="+slug;
+ C.sharedGroups=C.sharedGroups||[];
  var h='<div class="card"><h2>بيانات المطعم</h2><div class="g">'+
  f("name","الاسم",C.name)+f("tagline","وصف قصير",C.tagline)+f("logo","اللوجو (إيموجي أو رابط صورة)",C.logo)+f("cover","صورة الغلاف (رابط، اختياري)",C.cover)+
  f("whatsapp","رقم واتساب (بكود الدولة بدون +)",C.whatsapp)+f("email","إيميل استقبال الطلبات (اختياري)",C.email)+
@@ -58,14 +67,22 @@ function draw(){
  f("deliveryTime","وقت التوصيل",C.deliveryTime)+f("hours","مواعيد العمل",C.hours)+f("address","العنوان",C.address)+
  f("primary","لون أساسي",C.theme.primary,"color")+f("accent","لون ثانوي",C.theme.accent,"color")+
  '<div><label><input type="checkbox" id="dark"'+(C.theme.dark?" checked":"")+'> وضع داكن</label><label><input type="checkbox" id="open"'+(C.open?" checked":"")+'> المطعم مفتوح</label><label><input type="checkbox" id="pickup"'+(C.pickup!==false?" checked":"")+'> استلام من الفرع</label></div></div></div>';
- h+='<div class="card"><h2>الأقسام</h2>'+C.categories.map((c,i)=>'<div class="bar" style="margin-bottom:6px"><input data-cat="'+i+'" value="'+esc(c.name)+'" style="max-width:300px"><button class="x" data-dc="'+i+'">حذف</button></div>').join("")+'<button class="s" id="addc">+ قسم</button></div>';
- h+='<div class="card"><h2>الأصناف</h2>'+C.items.map((it,i)=>'<div class="row"><div><label>إيموجي</label><input data-i="'+i+'" data-k="emoji" value="'+esc(it.emoji)+'"></div><div><label>الاسم</label><input data-i="'+i+'" data-k="name" value="'+esc(it.name)+'"></div><div><label>الوصف</label><input data-i="'+i+'" data-k="desc" value="'+esc(it.desc)+'"></div><div><label>السعر</label><input type="number" data-i="'+i+'" data-k="price" value="'+esc(it.price)+'"></div><div><label>القسم</label><select data-i="'+i+'" data-k="cat">'+C.categories.map(c=>'<option value="'+esc(c.id)+'"'+(c.id===it.cat?" selected":"")+'>'+esc(c.name)+'</option>').join("")+'</select></div><div><label>صورة (رابط)</label><input data-i="'+i+'" data-k="image" value="'+esc(it.image)+'"></div><div><label><input type="checkbox" data-i="'+i+'" data-k="soldOut"'+(it.soldOut?" checked":"")+'> نفد</label><button class="x" data-di="'+i+'">حذف</button></div></div>').join("")+'<button class="s" id="addi">+ صنف</button></div>';
+ h+='<div class="card"><h2>الأقسام</h2>'+C.categories.map((c,i)=>'<div class="bar" style="margin-bottom:6px"><input data-p="categories.'+i+'.name" value="'+esc(c.name)+'" style="max-width:300px"><button class="x" data-del="categories.'+i+'">حذف</button></div>').join("")+'<button class="s" id="addc">+ قسم</button></div>';
+ h+='<div class="card"><h2>مجموعات مشتركة (اختيارات تتكرر في أصناف كتير)</h2><p class="note">مثلاً «إضافات» أو «الحجم» تعملها مرة وتربطها بأي صنف. كل مطعم له مجموعاته.</p>'+C.sharedGroups.map((g,i)=>'<div class="gh">المعرّف: <code>'+esc(g.id)+'</code></div>'+gEd(g,"sharedGroups."+i)).join("")+'<button class="s" id="addsg">+ مجموعة مشتركة</button></div>';
+ h+='<div class="card"><h2>الأصناف</h2>'+C.items.map(function(it,i){var p="items."+i;return '<div class="itbox"><div class="row"><div><label>إيموجي</label><input data-p="'+p+'.emoji" value="'+esc(it.emoji)+'"></div><div><label>الاسم</label><input data-p="'+p+'.name" value="'+esc(it.name)+'"></div><div><label>الوصف</label><input data-p="'+p+'.desc" value="'+esc(it.desc)+'"></div><div><label>السعر الأساسي</label><input type="number" data-p="'+p+'.price" value="'+esc(it.price)+'"></div><div><label>القسم</label><select data-p="'+p+'.cat">'+C.categories.map(c=>'<option value="'+esc(c.id)+'"'+(c.id===it.cat?" selected":"")+'>'+esc(c.name)+'</option>').join("")+'</select></div><div><label>صورة (رابط)</label><input data-p="'+p+'.image" value="'+esc(it.image)+'"></div><div><label><input type="checkbox" data-p="'+p+'.soldOut" '+(it.soldOut?"checked":"")+'> نفد</label><button class="x" data-del="'+p+'">حذف الصنف</button></div></div>'+
+ '<details'+((it.groups&&it.groups.length)||(it.groupRefs&&it.groupRefs.length)?" open":"")+'><summary>⚙️ خيارات الصنف (حجم / نكهة / إضافات)</summary>'+
+ (C.sharedGroups.length?'<div class="refs">ربط مجموعات مشتركة: '+C.sharedGroups.map(g=>'<label class="inl"><input type="checkbox" data-ref="'+i+'" data-id="'+esc(g.id)+'" '+((it.groupRefs||[]).indexOf(g.id)>-1?"checked":"")+'> '+esc(g.name)+'</label>').join("")+'</div>':'')+
+ (it.groups||[]).map((g,gi)=>gEd(g,p+".groups."+gi)).join("")+'<button class="s sm" data-addg="'+i+'">+ مجموعة خاصة بالصنف</button></details></div>'}).join("")+'<button class="s" id="addi">+ صنف</button></div>';
  $("#ed").innerHTML=h;
  $("#addc").onclick=function(){grab();C.categories.push({id:"c"+Date.now(),name:"قسم جديد"});draw()};
  $("#addi").onclick=function(){grab();C.items.push({id:"i"+Date.now(),cat:C.categories[0].id,name:"صنف جديد",desc:"",price:0,emoji:"🍽️"});draw()};
- document.querySelectorAll("[data-dc]").forEach(b=>b.onclick=function(){grab();if(C.categories.length>1){C.categories.splice(+b.dataset.dc,1);draw()}});
- document.querySelectorAll("[data-di]").forEach(b=>b.onclick=function(){grab();C.items.splice(+b.dataset.di,1);draw()});
+ $("#addsg").onclick=function(){grab();C.sharedGroups.push({id:"g"+Date.now(),name:"إضافات",type:"multi",choices:[{name:"",price:0}]});draw()};
+ document.querySelectorAll("[data-addg]").forEach(b=>b.onclick=function(){grab();var it=C.items[+b.dataset.addg];(it.groups=it.groups||[]).push({name:"الحجم",type:"single",required:true,choices:[{name:"عادي",price:0},{name:"كبير",price:10}]});draw()});
+ document.querySelectorAll("[data-addch]").forEach(b=>b.onclick=function(){grab();get(b.dataset.addch).choices.push({name:"",price:0});draw()});
+ document.querySelectorAll("[data-del]").forEach(b=>b.onclick=function(){grab();var P=b.dataset.del.split("."),i=P.pop();get(P.join(".")).splice(+i,1);if(!C.categories.length)C.categories.push({id:"main",name:"الأطباق"});draw()});
+ document.querySelectorAll("select[data-p$='.type']").forEach(e=>e.onchange=function(){grab();draw()});
 }
+function get(path){return path.split(".").reduce((o,k)=>o[k],C)}
 function grab(){
  if(!$("#name"))return;
  ["name","tagline","logo","cover","whatsapp","email","currency","deliveryTime","hours","address"].forEach(k=>C[k]=$("#"+k).value.trim());
@@ -73,8 +90,10 @@ function grab(){
  ["deliveryFee","minOrder"].forEach(k=>C[k]=+$("#"+k).value||0);
  C.theme={primary:$("#primary").value,accent:$("#accent").value,dark:$("#dark").checked};
  C.open=$("#open").checked;C.pickup=$("#pickup").checked;
- document.querySelectorAll("[data-cat]").forEach(e=>C.categories[+e.dataset.cat].name=e.value);
- document.querySelectorAll("[data-i]").forEach(e=>{var it=C.items[+e.dataset.i],k=e.dataset.k;
-  it[k]=e.type==="checkbox"?e.checked:(k==="price"?(+e.value||0):e.value);if(it[k]===""||it[k]===false)delete it[k]; if(k==="name"&&!it.name)it.name=""});
+ document.querySelectorAll("[data-p]").forEach(function(e){var P=e.dataset.p.split("."),k=P.pop(),o=get(P.join("."));
+  var v=e.type==="checkbox"?e.checked:(e.type==="number"?(e.value===""?"":+e.value):e.value);
+  if(v===""||v===false){ if(k==="required"&&o.type==="single"&&v===false)o[k]=false; else if(k==="price"||k==="name")o[k]=(k==="price"?0:""); else delete o[k]; } else o[k]=v;});
+ C.items.forEach(function(it,i){var r=[];document.querySelectorAll('[data-ref="'+i+'"]:checked').forEach(e=>r.push(e.dataset.id));if(r.length)it.groupRefs=r;else delete it.groupRefs;
+  if(it.groups&&!it.groups.length)delete it.groups});
 }
 </script></body></html>

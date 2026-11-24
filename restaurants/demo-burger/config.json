@@ -3,7 +3,11 @@
   "tagline": "برجر مشوي على الفحم، دليفري لحد باب البيت",
   "logo": "🍔",
   "cover": "",
-  "theme": { "primary": "#c8102e", "accent": "#f5b301", "dark": false },
+  "theme": {
+    "primary": "#c8102e",
+    "accent": "#f5b301",
+    "dark": false
+  },
   "whatsapp": "201000000000",
   "email": "",
   "currency": "جنيه",
@@ -15,21 +19,162 @@
   "address": "الإسكندرية، محطة الرمل",
   "pickup": true,
   "categories": [
-    { "id": "burger", "name": "برجر" },
-    { "id": "chicken", "name": "فراخ" },
-    { "id": "sides", "name": "جنب الوجبة" },
-    { "id": "drinks", "name": "مشروبات" }
+    {
+      "id": "burger",
+      "name": "برجر"
+    },
+    {
+      "id": "chicken",
+      "name": "فراخ"
+    },
+    {
+      "id": "sides",
+      "name": "جنب الوجبة"
+    },
+    {
+      "id": "drinks",
+      "name": "مشروبات"
+    }
   ],
   "items": [
-    { "id": "b1", "cat": "burger", "name": "كلاسيك برجر", "desc": "لحم بقري 150 جم، جبنة شيدر، خس، طماطم، صوص خاص", "price": 120, "emoji": "🍔" },
-    { "id": "b2", "cat": "burger", "name": "دبل برجر", "desc": "قطعتين لحم، جبنة مضاعفة، مخلل", "price": 175, "emoji": "🍔" },
-    { "id": "b3", "cat": "burger", "name": "بيكون برجر", "desc": "لحم، بيكون مقرمش، جبنة، صوص باربكيو", "price": 160, "emoji": "🥓" },
-    { "id": "c1", "cat": "chicken", "name": "كرسبي ساندوتش", "desc": "صدور فراخ مقرمشة، كولسلو، مايو", "price": 110, "emoji": "🍗" },
-    { "id": "c2", "cat": "chicken", "name": "بوم بوم شيكن", "desc": "قطع فراخ مقلية بصوص حار", "price": 130, "emoji": "🍗" },
-    { "id": "s1", "cat": "sides", "name": "بطاطس", "desc": "بطاطس مقلية", "price": 35, "emoji": "🍟",
-      "options": [{ "name": "حجم كبير", "price": 15 }, { "name": "مع جبنة", "price": 20 }] },
-    { "id": "s2", "cat": "sides", "name": "حلقات بصل", "desc": "", "price": 40, "emoji": "🧅" },
-    { "id": "d1", "cat": "drinks", "name": "بيبسي", "desc": "علبة", "price": 20, "emoji": "🥤" },
-    { "id": "d2", "cat": "drinks", "name": "مياه", "desc": "", "price": 8, "emoji": "💧", "soldOut": true }
+    {
+      "id": "b1",
+      "cat": "burger",
+      "name": "كلاسيك برجر",
+      "desc": "لحم بقري 150 جم، جبنة شيدر، خس، طماطم، صوص خاص",
+      "price": 120,
+      "emoji": "🍔",
+      "groupRefs": [
+        "extras"
+      ]
+    },
+    {
+      "id": "b2",
+      "cat": "burger",
+      "name": "دبل برجر",
+      "desc": "قطعتين لحم، جبنة مضاعفة، مخلل",
+      "price": 175,
+      "emoji": "🍔",
+      "groupRefs": [
+        "extras"
+      ]
+    },
+    {
+      "id": "b3",
+      "cat": "burger",
+      "name": "بيكون برجر",
+      "desc": "لحم، بيكون مقرمش، جبنة، صوص باربكيو",
+      "price": 160,
+      "emoji": "🥓",
+      "groupRefs": [
+        "extras"
+      ]
+    },
+    {
+      "id": "c1",
+      "cat": "chicken",
+      "name": "كرسبي ساندوتش",
+      "desc": "صدور فراخ مقرمشة، كولسلو، مايو",
+      "price": 110,
+      "emoji": "🍗"
+    },
+    {
+      "id": "c2",
+      "cat": "chicken",
+      "name": "بوم بوم شيكن",
+      "desc": "قطع فراخ مقلية بصوص حار",
+      "price": 130,
+      "emoji": "🍗"
+    },
+    {
+      "id": "s1",
+      "cat": "sides",
+      "name": "بطاطس",
+      "desc": "بطاطس مقلية",
+      "price": 35,
+      "emoji": "🍟",
+      "groups": [
+        {
+          "name": "الحجم",
+          "type": "single",
+          "required": true,
+          "choices": [
+            {
+              "name": "عادي",
+              "price": 0
+            },
+            {
+              "name": "صاروخ",
+              "price": 15
+            }
+          ]
+        },
+        {
+          "name": "النكهة",
+          "type": "single",
+          "required": false,
+          "choices": [
+            {
+              "name": "سبايسي",
+              "price": 0
+            },
+            {
+              "name": "توميه",
+              "price": 5
+            }
+          ]
+        }
+      ],
+      "groupRefs": [
+        "extras"
+      ]
+    },
+    {
+      "id": "s2",
+      "cat": "sides",
+      "name": "حلقات بصل",
+      "desc": "",
+      "price": 40,
+      "emoji": "🧅"
+    },
+    {
+      "id": "d1",
+      "cat": "drinks",
+      "name": "بيبسي",
+      "desc": "علبة",
+      "price": 20,
+      "emoji": "🥤"
+    },
+    {
+      "id": "d2",
+      "cat": "drinks",
+      "name": "مياه",
+      "desc": "",
+      "price": 8,
+      "emoji": "💧",
+      "soldOut": true
+    }
+  ],
+  "sharedGroups": [
+    {
+      "id": "extras",
+      "name": "إضافات",
+      "type": "multi",
+      "max": 4,
+      "choices": [
+        {
+          "name": "جبنة شيدر زيادة",
+          "price": 15
+        },
+        {
+          "name": "بيكون",
+          "price": 25
+        },
+        {
+          "name": "مخلل",
+          "price": 0
+        }
+      ]
+    }
   ]
 }

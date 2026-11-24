@@ -3,7 +3,11 @@
   "tagline": "كشري مصري أصلي من 1985",
   "logo": "🍝",
   "cover": "",
-  "theme": { "primary": "#1b5e20", "accent": "#ff8f00", "dark": true },
+  "theme": {
+    "primary": "#1b5e20",
+    "accent": "#ff8f00",
+    "dark": true
+  },
   "whatsapp": "201000000001",
   "email": "",
   "currency": "جنيه",
@@ -15,14 +19,90 @@
   "address": "الإسكندرية، سموحة",
   "pickup": true,
   "categories": [
-    { "id": "k", "name": "كشري" },
-    { "id": "e", "name": "إضافات" }
+    {
+      "id": "k",
+      "name": "كشري"
+    },
+    {
+      "id": "e",
+      "name": "إضافات"
+    }
   ],
   "items": [
-    { "id": "k1", "cat": "k", "name": "كشري صغير", "desc": "", "price": 30, "emoji": "🍝" },
-    { "id": "k2", "cat": "k", "name": "كشري وسط", "desc": "", "price": 45, "emoji": "🍝" },
-    { "id": "k3", "cat": "k", "name": "كشري كبير", "desc": "", "price": 60, "emoji": "🍝" },
-    { "id": "e1", "cat": "e", "name": "دقة", "desc": "", "price": 5, "emoji": "🌶️" },
-    { "id": "e2", "cat": "e", "name": "أرز بلبن", "desc": "", "price": 25, "emoji": "🍮" }
+    {
+      "id": "k1",
+      "cat": "k",
+      "name": "كشري صغير",
+      "desc": "",
+      "price": 30,
+      "emoji": "🍝",
+      "groups": [
+        {
+          "name": "الصلصة",
+          "type": "single",
+          "required": true,
+          "choices": [
+            {
+              "name": "عادي",
+              "price": 0
+            },
+            {
+              "name": "حار",
+              "price": 0
+            }
+          ]
+        },
+        {
+          "name": "إضافات",
+          "type": "multi",
+          "choices": [
+            {
+              "name": "دقة زيادة",
+              "price": 3
+            },
+            {
+              "name": "شطة",
+              "price": 0
+            },
+            {
+              "name": "بصل مقلي زيادة",
+              "price": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "k2",
+      "cat": "k",
+      "name": "كشري وسط",
+      "desc": "",
+      "price": 45,
+      "emoji": "🍝"
+    },
+    {
+      "id": "k3",
+      "cat": "k",
+      "name": "كشري كبير",
+      "desc": "",
+      "price": 60,
+      "emoji": "🍝"
+    },
+    {
+      "id": "e1",
+      "cat": "e",
+      "name": "دقة",
+      "desc": "",
+      "price": 5,
+      "emoji": "🌶️"
+    },
+    {
+      "id": "e2",
+      "cat": "e",
+      "name": "أرز بلبن",
+      "desc": "",
+      "price": 25,
+      "emoji": "🍮"
+    }
   ]
 }
