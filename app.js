@@ -12,7 +12,7 @@
     return list[0];
   }
   function load() {
-    fetch("restaurants/index.json").then(function (r) { return r.json(); }).then(function (list) {
+    fetch("restaurants/index.json?v=" + Date.now()).then(function (r) { return r.json(); }).then(function (list) {
       slug = getSlug(list);
       return fetch("restaurants/" + slug + "/config.json?v=" + Date.now());
     }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (c) {
