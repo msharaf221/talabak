@@ -1,11 +1,11 @@
 {
   "name": "كشري الحاره",
   "tagline": "كشري مصري أصلي من 1985",
-  "logo": "🍝",
-  "cover": "",
+  "logo": "",
+  "cover": "restaurants/demo-koshary/img/kcover.jpg",
   "theme": {
-    "primary": "#1b5e20",
-    "accent": "#ff8f00",
+    "primary": "#16a34a",
+    "accent": "#ffb020",
     "dark": true
   },
   "whatsapp": "201000000001",
@@ -70,7 +70,8 @@
             }
           ]
         }
-      ]
+      ],
+      "image": "restaurants/demo-koshary/img/kbowl.jpg"
     },
     {
       "id": "k2",
@@ -78,7 +79,9 @@
       "name": "كشري وسط",
       "desc": "",
       "price": 45,
-      "emoji": "🍝"
+      "emoji": "🍝",
+      "image": "restaurants/demo-koshary/img/kbowl.jpg",
+      "featured": true
     },
     {
       "id": "k3",
@@ -86,7 +89,8 @@
       "name": "كشري كبير",
       "desc": "",
       "price": 60,
-      "emoji": "🍝"
+      "emoji": "🍝",
+      "image": "restaurants/demo-koshary/img/kbowl.jpg"
     },
     {
       "id": "e1",
@@ -94,7 +98,8 @@
       "name": "دقة",
       "desc": "",
       "price": 5,
-      "emoji": "🌶️"
+      "emoji": "🌶️",
+      "image": "restaurants/demo-koshary/img/kchili.jpg"
     },
     {
       "id": "e2",
@@ -102,7 +107,9 @@
       "name": "أرز بلبن",
       "desc": "",
       "price": 25,
-      "emoji": "🍮"
+      "emoji": "🍮",
+      "image": "restaurants/demo-koshary/img/kpud.jpg",
+      "featured": true
     }
   ]
 }

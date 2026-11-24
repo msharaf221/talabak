@@ -61,7 +61,7 @@ function draw(){
  $("#path").textContent="الملف: restaurants/"+slug+"/config.json  |  الرابط: ?r="+slug;
  C.sharedGroups=C.sharedGroups||[];
  var h='<div class="card"><h2>بيانات المطعم</h2><div class="g">'+
- f("name","الاسم",C.name)+f("tagline","وصف قصير",C.tagline)+f("logo","اللوجو (إيموجي أو رابط صورة)",C.logo)+f("cover","صورة الغلاف (رابط، اختياري)",C.cover)+
+ f("name","الاسم",C.name)+f("tagline","وصف قصير",C.tagline)+f("logo","اللوجو (رابط/مسار صورة، أو سيبه فاضي ويظهر أول حرف)",C.logo)+f("cover","صورة الغلاف (رابط، اختياري)",C.cover)+
  f("whatsapp","رقم واتساب (بكود الدولة بدون +)",C.whatsapp)+f("email","إيميل استقبال الطلبات (اختياري)",C.email)+
  f("currency","العملة",C.currency)+f("deliveryFee","سعر التوصيل",C.deliveryFee,"number")+f("minOrder","أقل طلب",C.minOrder,"number")+
  f("deliveryTime","وقت التوصيل",C.deliveryTime)+f("hours","مواعيد العمل",C.hours)+f("address","العنوان",C.address)+
