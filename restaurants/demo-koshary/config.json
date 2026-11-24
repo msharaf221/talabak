@@ -1,0 +1,28 @@
+{
+  "name": "كشري الحاره",
+  "tagline": "كشري مصري أصلي من 1985",
+  "logo": "🍝",
+  "cover": "",
+  "theme": { "primary": "#1b5e20", "accent": "#ff8f00", "dark": true },
+  "whatsapp": "201000000001",
+  "email": "",
+  "currency": "جنيه",
+  "deliveryFee": 15,
+  "minOrder": 40,
+  "deliveryTime": "30 دقيقة",
+  "open": true,
+  "hours": "10 صباحاً - 12 منتصف الليل",
+  "address": "الإسكندرية، سموحة",
+  "pickup": true,
+  "categories": [
+    { "id": "k", "name": "كشري" },
+    { "id": "e", "name": "إضافات" }
+  ],
+  "items": [
+    { "id": "k1", "cat": "k", "name": "كشري صغير", "desc": "", "price": 30, "emoji": "🍝" },
+    { "id": "k2", "cat": "k", "name": "كشري وسط", "desc": "", "price": 45, "emoji": "🍝" },
+    { "id": "k3", "cat": "k", "name": "كشري كبير", "desc": "", "price": 60, "emoji": "🍝" },
+    { "id": "e1", "cat": "e", "name": "دقة", "desc": "", "price": 5, "emoji": "🌶️" },
+    { "id": "e2", "cat": "e", "name": "أرز بلبن", "desc": "", "price": 25, "emoji": "🍮" }
+  ]
+}

@@ -1,0 +1,27 @@
+# طلباتك (Talabak)
+
+موقع منيو وطلب أونلاين لأي مطعم. من غير سيرفر، من غير كود، ومجاني على GitHub Pages.
+الطلب بيوصل للمطعم على واتساب (وإيميل اختياري).
+
+## إزاي تعمل مطعم جديد
+1. افتح `admin.html` على الموقع بعد النشر (أو محلياً).
+2. اضغط «مطعم جديد»، اكتب اسم إنجليزي (مثال `my-burger`).
+3. املا الاسم واللوجو والألوان ورقم الواتساب والأقسام والأصناف.
+4. اضغط «تحميل config.json» وارفعه على GitHub في `restaurants/my-burger/config.json`، وضيف `"my-burger"` في `restaurants/index.json`.
+5. رابط المطعم: `https://USERNAME.github.io/talabak/?r=my-burger`
+
+للتعديل بعد كده: عدّل `config.json` مباشرة من GitHub (أيقونة القلم) وهيتحدّث الموقع في دقيقة.
+
+## الإعدادات (config.json)
+`name, tagline, logo, cover, theme{primary,accent,dark}, whatsapp, email, currency, deliveryFee, minOrder, deliveryTime, open, hours, address, pickup, categories[], items[]`
+الصنف: `id, cat, name, desc, price, emoji | image, soldOut, options[{name,price}]`
+
+## استقبال الطلبات
+- **واتساب:** حط رقم المطعم في `whatsapp` بكود الدولة (مثال `201012345678`). الزبون بيضغط إرسال فيفتح واتساب برسالة جاهزة بالطلب.
+- **إيميل (اختياري):** حط `email`. بيستخدم خدمة FormSubmit المجانية، وأول طلب بيوصل إيميل تأكيد لازم المطعم يفعّله. لو فشل بيفتح تطبيق الإيميل.
+
+## النشر المجاني
+Settings > Pages > Source: GitHub Actions. بعد أول push على main الموقع بيتنشر. لدومين خاص: Settings > Pages > Custom domain.
+
+## ملاحظة
+الطلب بيتبعت من تليفون الزبون، فمفيش حفظ للطلبات على سيرفر. لو عايز لوحة طلبات وتتبع، ده محتاج Supabase (مجاني) كخطوة تانية.

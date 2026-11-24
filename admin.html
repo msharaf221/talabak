@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة تعديل المنيو</title>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:Almarai,sans-serif;background:#f4f4f6;margin:0;color:#1d1d1f}
+.w{max-width:900px;margin:auto;padding:16px}
+h1{font-size:22px}h2{font-size:17px;margin:0 0 10px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid #e5e5ea}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+label{font-size:12px;color:#666;display:block;margin-bottom:3px}
+input,select,textarea{width:100%;padding:9px;border:1px solid #d6d6dc;border-radius:8px;font:inherit}
+input[type=color]{padding:2px;height:38px}input[type=checkbox]{width:auto}
+button{font:inherit;padding:9px 14px;border:0;border-radius:9px;background:#c8102e;color:#fff;cursor:pointer;font-weight:700}
+button.s{background:#eee;color:#222}button.x{background:#fff;color:#b71c1c;border:1px solid #e5e5ea;padding:6px 10px}
+.row{display:grid;grid-template-columns:50px 1.2fr 1.6fr 80px 1fr 90px auto;gap:6px;align-items:end;margin-bottom:8px}
+.bar{display:flex;gap:8px;flex-wrap:wrap}
+.note{font-size:13px;color:#555;line-height:1.8}
+@media(max-width:700px){.row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body><div class="w">
+<h1>🛠️ لوحة تعديل المنيو</h1>
+<div class="card note">1) اختار مطعم أو اعمل جديد. 2) عدّل البيانات. 3) اضغط «تحميل config.json» وحطه في فولدر المطعم <code>restaurants/اسم-المطعم/config.json</code> على GitHub (Upload files). الموقع بيتحدّث لوحده في دقيقة. الصور: حط رابط أو ارفعها في فولدر المطعم واكتب مسارها (مثلاً <code>restaurants/اسم/burger.jpg</code>).</div>
+<div class="card"><div class="bar">
+<select id="pick" style="max-width:260px"></select>
+<button class="s" id="new">+ مطعم جديد</button>
+<button class="s" id="imp">استيراد ملف</button><input type="file" id="file" accept=".json" hidden>
+<button class="s" id="prev">معاينة</button>
+<button id="dl">تحميل config.json</button>
+</div><p class="note" id="path"></p></div>
+<div id="ed"></div>
+</div>
+<script>
+var C, slug="", list=[];
+var $=function(s){return document.querySelector(s)};
+var blank=function(){return {name:"اسم المطعم",tagline:"",logo:"🍽️",cover:"",theme:{primary:"#c8102e",accent:"#f5b301",dark:false},whatsapp:"20",email:"",currency:"جنيه",deliveryFee:0,minOrder:0,deliveryTime:"",open:true,hours:"",address:"",pickup:true,categories:[{id:"main",name:"الأطباق"}],items:[]}};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+fetch("restaurants/index.json").then(r=>r.json()).then(function(l){list=l;$("#pick").innerHTML=l.map(s=>"<option>"+esc(s)+"</option>").join("");load(l[0])});
+function load(s){slug=s;fetch("restaurants/"+s+"/config.json").then(r=>r.json()).then(function(c){C=c;draw()})}
+$("#pick").onchange=function(){load(this.value)};
+$("#new").onclick=function(){var s=prompt("اسم المطعم بالإنجليزي بدون مسافات (مثال: my-burger)");if(!s||!/^[\w-]+$/.test(s))return;slug=s;C=blank();draw()};
+$("#imp").onclick=()=>$("#file").click();
+$("#file").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{C=JSON.parse(r.result);draw()}catch(e){alert("ملف غير صالح")}};r.readAsText(f)};
+$("#dl").onclick=function(){grab();var b=new Blob([JSON.stringify(C,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="config.json";a.click();
+ var msg="";if(list.indexOf(slug)<0)msg="\nمطعم جديد: ضيف \""+slug+"\" في restaurants/index.json";alert("حطه في restaurants/"+slug+"/config.json"+msg)};
+$("#prev").onclick=function(){grab();sessionStorage.setItem("talabak:preview",JSON.stringify(C));window.open("index.html?r="+encodeURIComponent(slug)+"&preview=1","_blank")};
+function f(id,label,val,type){return '<div><label>'+label+'</label><input id="'+id+'" type="'+(type||"text")+'" value="'+esc(val)+'"></div>'}
+function draw(){
+ $("#path").textContent="الملف: restaurants/"+slug+"/config.json  |  الرابط: ?r="+slug;
+ var h='<div class="card"><h2>بيانات المطعم</h2><div class="g">'+
+ f("name","الاسم",C.name)+f("tagline","وصف قصير",C.tagline)+f("logo","اللوجو (إيموجي أو رابط صورة)",C.logo)+f("cover","صورة الغلاف (رابط، اختياري)",C.cover)+
+ f("whatsapp","رقم واتساب (بكود الدولة بدون +)",C.whatsapp)+f("email","إيميل استقبال الطلبات (اختياري)",C.email)+
+ f("currency","العملة",C.currency)+f("deliveryFee","سعر التوصيل",C.deliveryFee,"number")+f("minOrder","أقل طلب",C.minOrder,"number")+
+ f("deliveryTime","وقت التوصيل",C.deliveryTime)+f("hours","مواعيد العمل",C.hours)+f("address","العنوان",C.address)+
+ f("primary","لون أساسي",C.theme.primary,"color")+f("accent","لون ثانوي",C.theme.accent,"color")+
+ '<div><label><input type="checkbox" id="dark"'+(C.theme.dark?" checked":"")+'> وضع داكن</label><label><input type="checkbox" id="open"'+(C.open?" checked":"")+'> المطعم مفتوح</label><label><input type="checkbox" id="pickup"'+(C.pickup!==false?" checked":"")+'> استلام من الفرع</label></div></div></div>';
+ h+='<div class="card"><h2>الأقسام</h2>'+C.categories.map((c,i)=>'<div class="bar" style="margin-bottom:6px"><input data-cat="'+i+'" value="'+esc(c.name)+'" style="max-width:300px"><button class="x" data-dc="'+i+'">حذف</button></div>').join("")+'<button class="s" id="addc">+ قسم</button></div>';
+ h+='<div class="card"><h2>الأصناف</h2>'+C.items.map((it,i)=>'<div class="row"><div><label>إيموجي</label><input data-i="'+i+'" data-k="emoji" value="'+esc(it.emoji)+'"></div><div><label>الاسم</label><input data-i="'+i+'" data-k="name" value="'+esc(it.name)+'"></div><div><label>الوصف</label><input data-i="'+i+'" data-k="desc" value="'+esc(it.desc)+'"></div><div><label>السعر</label><input type="number" data-i="'+i+'" data-k="price" value="'+esc(it.price)+'"></div><div><label>القسم</label><select data-i="'+i+'" data-k="cat">'+C.categories.map(c=>'<option value="'+esc(c.id)+'"'+(c.id===it.cat?" selected":"")+'>'+esc(c.name)+'</option>').join("")+'</select></div><div><label>صورة (رابط)</label><input data-i="'+i+'" data-k="image" value="'+esc(it.image)+'"></div><div><label><input type="checkbox" data-i="'+i+'" data-k="soldOut"'+(it.soldOut?" checked":"")+'> نفد</label><button class="x" data-di="'+i+'">حذف</button></div></div>').join("")+'<button class="s" id="addi">+ صنف</button></div>';
+ $("#ed").innerHTML=h;
+ $("#addc").onclick=function(){grab();C.categories.push({id:"c"+Date.now(),name:"قسم جديد"});draw()};
+ $("#addi").onclick=function(){grab();C.items.push({id:"i"+Date.now(),cat:C.categories[0].id,name:"صنف جديد",desc:"",price:0,emoji:"🍽️"});draw()};
+ document.querySelectorAll("[data-dc]").forEach(b=>b.onclick=function(){grab();if(C.categories.length>1){C.categories.splice(+b.dataset.dc,1);draw()}});
+ document.querySelectorAll("[data-di]").forEach(b=>b.onclick=function(){grab();C.items.splice(+b.dataset.di,1);draw()});
+}
+function grab(){
+ if(!$("#name"))return;
+ ["name","tagline","logo","cover","whatsapp","email","currency","deliveryTime","hours","address"].forEach(k=>C[k]=$("#"+k).value.trim());
+ C.whatsapp=C.whatsapp.replace(/\D/g,"");
+ ["deliveryFee","minOrder"].forEach(k=>C[k]=+$("#"+k).value||0);
+ C.theme={primary:$("#primary").value,accent:$("#accent").value,dark:$("#dark").checked};
+ C.open=$("#open").checked;C.pickup=$("#pickup").checked;
+ document.querySelectorAll("[data-cat]").forEach(e=>C.categories[+e.dataset.cat].name=e.value);
+ document.querySelectorAll("[data-i]").forEach(e=>{var it=C.items[+e.dataset.i],k=e.dataset.k;
+  it[k]=e.type==="checkbox"?e.checked:(k==="price"?(+e.value||0):e.value);if(it[k]===""||it[k]===false)delete it[k]; if(k==="name"&&!it.name)it.name=""});
+}
+</script></body></html>
